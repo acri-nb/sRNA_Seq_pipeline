@@ -21,8 +21,22 @@ design$condition <- factor(design$condition,levels=c("control","adenocarcinoma",
 design.matrix <- model.matrix(~ condition,data=design)
 
 
+#if you want to include batches in the design, perform this if you want to fix batching effect
+design_2 <- design
+design_2$batch <- "b1"
+design_2$batch[c(6,7,8,10,14,15)] <- "b2"
+design_2$condition <-factor(design_2$condition,levels=c("control","adenocarcinoma","COPD"))
+design_2$batch <- factor (design_2$batch, levels=c("b1","b2"))
+design.matrix_2 <- model.matrix(~condition + batch + condition:batch,data=design_2)
+
+
+
 #edgeR object creation, using count matrix, genes = names of the genes
 y <- DGEList(counts=count,genes=row.names(count))
+
+#edgeR object with batching groups
+yB <- DGEList(counts=y2$counts, group=design_2$condition:design_2$batch)
+
 
 #to visualize library size barplot
 barplot(y$samples$lib.size,col=col_vector,legend = TRUE)
@@ -46,6 +60,7 @@ y2 <- calcNormFactors(y2,method = "TMM")
 ##to plot MDS , to check variability (type of PCA)
 plotMDS(y2[,c(1:4,9:16)],dim.plot = c(1,2))
 
+###DE analysis
 #dispersion estimation and differential expression
 y2 <- estimateGLMCommonDisp(y2,design.matrix)
 y2 <- estimateGLMTrendedDisp(y2,design.matrix)
@@ -55,6 +70,16 @@ fit <- glmFit(y2,design.matrix)
 res <- glmLRT(fit,coef=2)
 #generates a table of DE results for all genes after filtering
 final <- topTags(res,n=nrow(y2$counts))
+##for batching effect DE
+yB <- estimateGLMCommonDisp(yB,design.matrix_2)
+yB <- estimateGLMTrendedDisp(yB,design.matrix_2)
+yB <- estimateGLMTagwiseDisp(yB,design.matrix_2)
+fitB <- glmFit(yB,design.matrix_2)
+qlf <- glmLRT(fitB,coef="conditionadenocarcinoma")
+qlf2 <- glmLRT(fitB,coef="conditionCOPD")
+results_aB <- topTags(qlf,nrow(yB$counts))
+results_cB <- topTags(qlf2,nrow(yB$counts))
+
 
 ###reate dataframe for the final results
 #dataframe with raw and normalized counts
