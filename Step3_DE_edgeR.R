@@ -95,4 +95,21 @@ res_FDR_filtered <- results2[which(results2$FDR.x < 0.05 | results2$FDR.y < 0.05
 matrix_heat <- as.matrix(res_FDR_filtered[,19:35])
 pheatmap(log2(matrix_heat+1/rowMeans(matrix_heat+1))-2,breaks=c(seq(-3,-1,length=100),seq(-0.9,0.9,length=100), seq(1,3,length=100)),color=bluered(299),  show_rownames = FALSE,annotation_col    = mat_col)
 
+###upset plots
+
+##use output of perl script for binary production
+tnbc <- read.table("binary.txt",header=T)
+library(UpSetR)
+pdf("tnbc.pdf")
+upset(tnbc,nset=8,keep.order=T,nintersects = 62,set_size.show=F)
+upset(tbinary,nset=8,keep.order=T,nintersects = 200,set_size.show=F, show.numbers = F)
+dev.off()
+
+##combinatory matrix of relationships
+library(ComplexHeatmap)
+comb2 <- make_comb_mat(binary)
+
+head(comb2)
+write.table(comb_size(comb2),file="combinations.tsv")
+comb_size(comb2)
 
