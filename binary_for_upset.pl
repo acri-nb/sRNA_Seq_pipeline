@@ -11,7 +11,7 @@ open (FILE,$ARGV[0]);
 my %hash_total;
 print "x\tmRNA_fragments\ttRNA\tmiRNA\tlncRNA_fragments\tpiRNA\tmisc_RNA\tsnoRNA\tothers\n";
 my $total_features=0;
-while (<FILE>){4440987
+while (<FILE>){
 	chomp $_;
 	if ($_ =~ /^chr/){
 	my @splitt = split (/\t/,$_);
