@@ -4,7 +4,7 @@
 
 ### Trimming
 #trilink ion proton recommended
-~/bin/trim_galore/Trim_galoreV0.6.5/trim_galore -a TCACCGACTGCCATAGAG file.fastq.gz
+~/bin/trim_galore/Trim_galoreV0.6.5/trim_galore -a TCACCGACTGCCATAGAG file.fastq.gz --small_rna
 #nextflex triming recommended 
 ~/bin/trim_galore/Trim_galoreV0.6.5/trim_galore -a TGGAATTCTCGGGTGCCAAGG --clip_R1 4 --three_prime_clip_R1 4 --length 23 file.fastq.gz
 #comboseq triming recommended 
