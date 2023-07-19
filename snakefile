@@ -60,7 +60,7 @@ rule align:
         "sam/{prefix}Aligned.out.bam"
     run:
         if config['Lib']=='nextflex' or config['Lib']=='trilink':
-            shell("/home/acri/tools/STAR-2.7.9a/bin/Linux_x86_64/STAR --runThreadN 16 --genomeDir {input.ref} --readFilesIn {input.trim_in} --readFilesCommand gunzip -c --outFileNamePrefix {params.pr} --outFilterScoreMinOverLread 0 --outFilterMatchNmin 16 --outFilterMatchNminOverLread 0 --outFilterMismatchNoverLmax 0.05 --alignIntronMax 1 --alignEndsType EndToEnd --outSAMtype BAM Unsorted")
+            shell("/home/acri/tools/STAR-2.7.9a/bin/Linux_x86_64/STAR --runThreadN 16 --genomeDir {input.ref} --readFilesIn {input.trim_in} --readFilesCommand gunzip -c --outFileNamePrefix {params.pr} --outFilterScoreMinOverLread 0 --outFilterMatchNmin 16 --outFilterMatchNminOverLread 0 --outFilterMismatchNoverLmax 0.025 --alignIntronMax 1 --alignEndsType EndToEnd --outSAMtype BAM Unsorted")
         elif config['Lib']=='comboseq':
             shell("/home/acri/tools/STAR-2.7.9a/bin/Linux_x86_64/STAR --runThreadN 16 --genomeDir {input.ref} --readFilesIn {input.trim_in} --readFilesCommand gunzip -c --outFileNamePrefix {params.pr} --outFilterScoreMinOverLread 0 --outFilterMatchNmin 15 --outFilterMatchNminOverLread 0.9 --outFilterMismatchNmax 1 --outFilterMismatchNoverLmax 0.3 --alignIntronMax 1 --outSAMtype BAM Unsorted")
         else:
